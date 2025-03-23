@@ -82,8 +82,16 @@
             function move() {
                 x += dx;
                 y += dy;
-                if (x <= 0 || x >= window.innerWidth - 50) { dx = -dx; balance += 2; updateBalance(); }
-                if (y <= 0 || y >= window.innerHeight - 50) { dy = -dy; balance += 2; updateBalance(); }
+                if (x <= 0 || x >= window.innerWidth - 50) { 
+                    dx = -dx; 
+                    balance += 10; // Her kenara çarpıldığında 10 Bitcoin ekle
+                    updateBalance();
+                }
+                if (y <= 0 || y >= window.innerHeight - 50) { 
+                    dy = -dy; 
+                    balance += 10; // Her kenara çarpıldığında 10 Bitcoin ekle
+                    updateBalance();
+                }
                 img.style.left = x + 'px';
                 img.style.top = y + 'px';
                 requestAnimationFrame(move);
