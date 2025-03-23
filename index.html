@@ -10,19 +10,27 @@
             color: white;
             font-family: Arial, sans-serif;
             text-align: center;
+            margin: 0;
+            padding: 0;
         }
         #bitcoin-balance {
             position: absolute;
             top: 10px;
             right: 10px;
             font-size: 20px;
+            font-weight: bold;
         }
         .product {
             display: inline-block;
             margin: 20px;
-            padding: 10px;
-            background-color: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .product:hover {
+            transform: scale(1.1);
         }
         #product2-image {
             display: none;
@@ -32,26 +40,44 @@
             transform: translateX(-50%);
             cursor: pointer;
         }
+        #popup {
+            position: absolute;
+            font-size: 30px;
+            color: yellow;
+            font-weight: bold;
+            display: none;
+            opacity: 1;
+            transition: opacity 1s ease-out;
+        }
     </style>
 </head>
 <body>
     <div id="bitcoin-balance">Bitcoin: <span id="balance">100</span></div>
+    
+    <!-- Ürünler -->
     <div class="product" onclick="buyProduct(1)">
         <p>Gentlemam Frog - 100 Bitcoin</p>
     </div>
     <div class="product" onclick="buyProduct(2)">
         <p>Don Pollo - 500 Bitcoin</p>
     </div>
+
+    <!-- Ürün 2 Resmi -->
     <img id="product2-image" src="https://raw.githubusercontent.com/Blankar5897/Elbezi/refs/heads/main/indir.jpeg" width="100" height="100" onclick="earnBitcoin(4)">
-    
+
+    <!-- Popup mesajı -->
+    <div id="popup">+4</div>
+
     <script>
         let balance = 100;
         let product1Count = 0;
 
+        // Bitcoin bakiyesini güncelle
         function updateBalance() {
             document.getElementById('balance').innerText = balance;
         }
 
+        // Ürün satın alma
         function buyProduct(product) {
             if (product === 1 && balance >= 100) {
                 balance -= 100;
@@ -64,6 +90,7 @@
             }
         }
 
+        // Ürün 1 resmini hareket ettir
         function spawnProduct1() {
             const img = document.createElement('img');
             img.src = "https://raw.githubusercontent.com/Blankar5897/Elbezi/refs/heads/main/indir(1).jpg";  // Ürün 1'in resmi
@@ -100,9 +127,23 @@
             move();
         }
 
+        // Bitcoin kazanma (tıklanabilir Don Pollo)
         function earnBitcoin(amount) {
             balance += amount;
             updateBalance();
+
+            // +4 animasyonu
+            const popup = document.getElementById('popup');
+            popup.style.left = '50%';
+            popup.style.top = '30%';
+            popup.style.display = 'block';
+            setTimeout(() => {
+                popup.style.opacity = 0;
+            }, 100);  // Animasyon bitmeden önce opacity 0'a geçer
+            setTimeout(() => {
+                popup.style.display = 'none';
+                popup.style.opacity = 1; // Yavaşça kaybolduktan sonra tekrar eski haline gelir
+            }, 1000);
         }
     </script>
 </body>
