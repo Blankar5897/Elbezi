@@ -6,26 +6,32 @@
     <title>Bitcoin Market</title>
     <style>
         body {
-            background-color: #00aaff;
+            background: linear-gradient(45deg, #00aaff, #0077cc, #005a8d);
+            background-size: 300% 300%;
+            animation: moveBackground 5s ease infinite;
             color: white;
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Ekranda kayma olmaması için */
+            overflow: hidden;
+            text-align: center;
         }
 
-        /* Bitcoin bakiyesi kutusu */
+        @keyframes moveBackground {
+            0% { background-position: 0 0; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0 0; }
+        }
+
         #bitcoin-balance {
             position: absolute;
             top: 10px;
             right: 10px;
             font-size: 24px;
             font-weight: bold;
-            color: #fff;
             text-shadow: 2px 2px 10px rgba(0,0,0,0.7);
         }
 
-        /* Ürün kartları */
         .product {
             display: inline-block;
             margin: 20px;
@@ -41,17 +47,7 @@
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
         }
 
-        /* Ürünler arasında yumuşak geçiş */
-        .product p {
-            font-size: 18px;
-            transition: color 0.3s ease;
-        }
-
-        .product:hover p {
-            color: #ffcc00;
-        }
-
-        /* Ürün 2 resminin animasyonu */
+        /* Don Pollo resmi başlangıçta gizli */
         #product2-image {
             display: none;
             position: absolute;
@@ -60,11 +56,17 @@
             transform: translateX(-50%);
             cursor: pointer;
             opacity: 0;
-            animation: fadeIn 1s forwards;
-            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            transition: opacity 1s ease-in-out, transform 1s ease-in-out;
         }
 
-        /* Popup +4 yazısının animasyonu */
+        /* Don Pollo görünür olduğunda animasyon */
+        .visible {
+            display: block !important;
+            opacity: 1 !important;
+            transform: translateX(-50%) scale(1.1);
+        }
+
+        /* +4 yazısının animasyonu */
         #popup {
             position: absolute;
             font-size: 30px;
@@ -73,27 +75,11 @@
             display: none;
             opacity: 1;
             transition: opacity 1s ease-out, transform 1s ease-out;
-            animation: bounce 1s infinite alternate;
         }
 
-        /* Arka planda hareketli desenler */
-        @keyframes moveBackground {
-            0% { background-position: 0 0; }
-            50% { background-position: 100% 100%; }
-            100% { background-position: 0 0; }
-        }
-
-        body {
-            background: linear-gradient(45deg, #00aaff, #0077cc, #005a8d);
-            background-size: 300% 300%;
-            animation: moveBackground 5s ease infinite;
-        }
-
-        /* Don Pollo +4 yazısı kaybolma animasyonu */
         @keyframes fadeInOut {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 0; }
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-50px); }
         }
 
         /* Bouncing animasyonu */
@@ -101,24 +87,6 @@
             0% { transform: scale(1); }
             50% { transform: scale(1.3); }
             100% { transform: scale(1); }
-        }
-
-        /* Yavaşça büyüyen buton animasyonu */
-        .button {
-            padding: 10px 20px;
-            font-size: 18px;
-            background-color: #ffcc00;
-            color: black;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-            transition: transform 0.2s ease, background-color 0.3s ease;
-        }
-
-        .button:hover {
-            transform: scale(1.1);
-            background-color: #ff6600;
         }
 
         /* Ürün 1 hareketli */
@@ -156,41 +124,35 @@
     <!-- Popup mesajı -->
     <div id="popup">+4</div>
 
-    <!-- Bitcoin kazandıran buton -->
-    <button class="button" onclick="earnBitcoin(10)">Kazan 10 Bitcoin</button>
-
     <script>
         let balance = 100;
         let product1Count = 0;
 
-        // Bitcoin bakiyesini güncelle
         function updateBalance() {
             document.getElementById('balance').innerText = balance;
         }
 
-        // Ürün satın alma işlemi
         function buyProduct(product) {
             if (product === 1 && balance >= 100) {
                 balance -= 100;
                 updateBalance();
-                spawnProduct1(); // Yeni bir Ürün 1 resmini ekle
+                spawnProduct1();
             } else if (product === 2 && balance >= 500) {
                 balance -= 500;
                 updateBalance();
-                document.getElementById('product2-image').style.display = 'block';
+                let product2Img = document.getElementById('product2-image');
+                product2Img.classList.add('visible'); // Don Pollo'yu görünür yap
             }
         }
 
-        // Ürün 1'in hareketi ve kenarlara çarpma animasyonu
         function spawnProduct1() {
             const img = document.createElement('img');
-            img.src = "https://raw.githubusercontent.com/Blankar5897/Elbezi/refs/heads/main/indir(1).jpg";  // Ürün 1'in resmi
+            img.src = "https://raw.githubusercontent.com/Blankar5897/Elbezi/refs/heads/main/indir(1).jpg";  
             img.style.position = 'absolute';
             img.style.width = '50px';
             img.style.height = '50px';
             img.style.left = Math.random() * (window.innerWidth - 50) + 'px';
             img.style.top = Math.random() * (window.innerHeight - 50) + 'px';
-            img.style.transition = 'transform 0.3s ease'; // Hareketin yumuşak olması için animasyon ekledik.
             img.classList.add('product1-image');
             
             document.body.appendChild(img);
@@ -204,12 +166,12 @@
                 y += dy;
                 if (x <= 0 || x >= window.innerWidth - 50) { 
                     dx = -dx; 
-                    balance += 10; // Her kenara çarpıldığında 10 Bitcoin ekle
+                    balance += 10; 
                     updateBalance();
                 }
                 if (y <= 0 || y >= window.innerHeight - 50) { 
                     dy = -dy; 
-                    balance += 10; // Her kenara çarpıldığında 10 Bitcoin ekle
+                    balance += 10; 
                     updateBalance();
                 }
                 img.style.left = x + 'px';
@@ -220,17 +182,18 @@
             move();
         }
 
-        // Bitcoin kazanma (tıklanabilir Don Pollo)
         function earnBitcoin(amount) {
             balance += amount;
             updateBalance();
-
-            // +4 animasyonu
-            const popup = document.getElementById('popup');
+            let popup = document.getElementById('popup');
             popup.style.left = '50%';
             popup.style.top = '30%';
             popup.style.display = 'block';
-            popup.style.animation = 'fadeInOut 2s forwards'; // Yavaşça kaybolma animasyonu
+            popup.style.animation = 'fadeInOut 1.5s forwards';
+
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 1500);
         }
     </script>
 </body>
