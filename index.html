@@ -23,6 +23,12 @@
             padding: 10px;
             background-color: rgba(0, 0, 0, 0.5);
             border-radius: 10px;
+            cursor: pointer;
+        }
+        .product img {
+            width: 50px;
+            height: 50px;
+            position: absolute;
         }
         #product2-image {
             display: none;
@@ -37,17 +43,16 @@
 <body>
     <div id="bitcoin-balance">Bitcoin: <span id="balance">100</span></div>
     <div class="product" onclick="buyProduct(1)">
-        <p>Gentlemam Frog - 100 Bitcoin</p>
+        <p>Ürün 1 - 100 Bitcoin</p>
     </div>
     <div class="product" onclick="buyProduct(2)">
-        <p>Don Pollo - 500 Bitcoin</p>
+        <p>Ürün 2 - 500 Bitcoin</p>
     </div>
-    <img id="product1-image" src="https://raw.githubusercontent.com/Blankar5897/Elbezi/refs/heads/main/indir(1).jpg" style="display: none; position: absolute; width: 50px; height: 50px;">
-    <img id="product2-image" src="https://raw.githubusercontent.com/Blankar5897/Elbezi/refs/heads/main/indir.jpeg" width="100" height="100" onclick="earnBitcoin(4)">
+    <img id="product2-image" src="urun2.png" width="100" height="100" onclick="earnBitcoin(4)">
     
     <script>
         let balance = 100;
-        let product1 = null;
+        let product1Count = 0;
 
         function updateBalance() {
             document.getElementById('balance').innerText = balance;
@@ -57,7 +62,7 @@
             if (product === 1 && balance >= 100) {
                 balance -= 100;
                 updateBalance();
-                spawnProduct1();
+                spawnProduct1(); // Yeni bir Ürün 1 resmini ekle
             } else if (product === 2 && balance >= 500) {
                 balance -= 500;
                 updateBalance();
@@ -66,11 +71,19 @@
         }
 
         function spawnProduct1() {
-            const img = document.getElementById('product1-image');
-            img.style.display = 'block';
-            let x = Math.random() * (window.innerWidth - 50);
-            let y = Math.random() * (window.innerHeight - 50);
+            // Yeni resim elementini oluştur
+            const img = document.createElement('img');
+            img.src = "urun1.png";  // Ürün 1'in resmi
+            img.style.left = Math.random() * (window.innerWidth - 50) + 'px';
+            img.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+
+            // Ürün 1 resmini body'e ekle
+            document.body.appendChild(img);
+
+            let x = parseInt(img.style.left);
+            let y = parseInt(img.style.top);
             let dx = 2, dy = 2;
+
             function move() {
                 x += dx;
                 y += dy;
